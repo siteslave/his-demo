@@ -240,7 +240,7 @@ class ServiceController extends BaseController
                     'p.fname', 'p.lname', 'p.id', 'p.cid', 'p.birthdate', 'p.sex',
                     't.typearea', 'p.home_id', 'pt.name as title_name', 't.typearea'
                 )
-                ->leftJoin('typearea as t', 't.cid', '=', 'p.cid')
+                ->leftJoin('person_typearea as t', 't.cid', '=', 'p.cid')
                 ->leftJoin('person_title as pt', 'pt.id', '=', 'p.title_id')
                 ->where('t.hospcode', Auth::user()->hospcode)
                 ->where('p.id', $service->person_id)

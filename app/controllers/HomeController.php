@@ -30,5 +30,10 @@ class HomeController extends BaseController {
     	$this->layout->content = View::make('home');
 	}
 
+	public function getDetail()
+	{
+		return View::make('hello.world');
+	}
+
 
 }
