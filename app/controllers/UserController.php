@@ -18,7 +18,6 @@ class UserController extends BaseController {
 	public function __construct()
 	{
 		$this->beforeFilter('csrf', array('on' => 'post'));
-		//$this->beforeFilter('auth', array('only' => array()));
 	}
 
 	/**
@@ -64,7 +63,7 @@ class UserController extends BaseController {
     if (Auth::attempt($data))
     {
         // $user = User::where('email', $email)->first();
-        // 
+        //
         // Session::put('email', $email);
         // Session::put('hospcode', $user->hospcode);
         // Session::put('provider_id', $user->provider_id);

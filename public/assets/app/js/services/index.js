@@ -38,7 +38,7 @@ $(function() {
                     '<td>' + app.stripped(v.diag, 30) + '</td>' +
                     '<td>' + v.provider_name + '</td>' +
                     '<td>' +
-                    '<a href="/services/' + v.visit_id + '" ' +
+                    '<a href="' + base_url + '/services/entries/' + v.visit_id + '" ' +
                     'class="btn btn-sm btn-primary"><i class="fa fa-sign-out"></i>' +
                     '</a>' +
                     '</td>' +

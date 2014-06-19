@@ -24,7 +24,7 @@ $(function() {
         app.loadPage({
             target: preg.target,
             url: pageUrl[0],
-            params: {},
+            //params: {},
             scripts: [scriptUrl[0]]
         });
     });
@@ -33,7 +33,7 @@ $(function() {
         app.loadPage({
             target: preg.target,
             url: pageUrl[1],
-            params: {},
+            //params: {},
             scripts: [scriptUrl[1]]
         });
     });
@@ -41,7 +41,7 @@ $(function() {
     app.loadPage({
         target: preg.target,
         url: pageUrl[0],
-        params: {},
+        //params: {},
         scripts: [scriptUrl[0]]
     });
 });

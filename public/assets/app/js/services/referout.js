@@ -21,7 +21,7 @@ $(function () {
         minimumInputLength: 2,
         allowClear: true,
         ajax: {
-            url: '/api/search/hospital',
+            url: apiUrls[0],
             dataType: 'jsonp',
             type: 'GET',
             quietMillis: 100,

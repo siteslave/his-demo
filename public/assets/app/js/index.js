@@ -42,13 +42,47 @@ app.get = function( url, params, cb ) {
 
 };
 
-/**
- * Global ajax post
- *
- * @param {string} 	url 		The url for data sending.
- * @param {object} 	params 		The parameters.
- * @return {object}
- */
+app.delete = function( url, params, cb ) {
+
+  params._token = csrf_token;
+
+	$.ajax({
+		url: url,
+		data: params,
+		type: 'DELETE',
+		dataType: 'JSON'
+	})
+	// If success
+	.done(function( data ) {
+		data.ok == '0' ? cb(data.error) : cb(null, data);
+	})
+	// If error
+	.error(function( err ) {
+		cb( err.responseText );
+	});
+
+};
+
+app.put = function( url, params, cb ) {
+
+  params._token = csrf_token;
+
+	$.ajax({
+		url: url,
+		data: params,
+		type: 'PUT',
+		dataType: 'JSON'
+	})
+	// If success
+	.done(function( data ) {
+		data.ok == '0' ? cb(data.error) : cb(null, data);
+	})
+	// If error
+	.error(function( err ) {
+		cb( err.responseText );
+	});
+
+};
 
 app.post = function( url, params, cb ) {
 
@@ -181,34 +215,65 @@ app.stripped = function (msg, len) {
 //target, page, params, scripts
 app.loadPage = function (data) {
 
-    data.params.csrf_token = csrf_token;
-
-    $(data.target).load(data.url, data.params, function (res, status, xhr) {
-        if (status != 'error')
-        {
-            if(data.scripts)
+    if (!data.params) {
+        $(data.target).load(data.url, function (res, status, xhr) {
+            if (status != 'error')
             {
-                if (_.isArray(data.scripts))
+                if(data.scripts)
                 {
-                    _.each(data.scripts, function(v) {
-                        $.getScript(v, function() {
+                    if (_.isArray(data.scripts))
+                    {
+                        _.each(data.scripts, function(v) {
+                            $.getScript(v, function() {
+                                app.setRuntime();
+                            });
+                        });
+                    }
+                    else
+                    {
+                        $.getScript(data.scripts, function() {
                             app.setRuntime();
                         });
-                    });
-                }
-                else
-                {
-                    $.getScript(data.scripts, function() {
-                        app.setRuntime();
-                    });
+                    }
                 }
             }
-        }
-        else
-        {
-            app.alert('ไม่สามารถโหลดหน้าเอกสารได้: [' + xhr.statusText + ']');
-        }
-    });
+            else
+            {
+                app.alert('ไม่สามารถโหลดหน้าเอกสารได้: [' + xhr.statusText + ']');
+            }
+        });
+    } else {
+        data.params.csrf_token = csrf_token;
+
+        $(data.target).load(data.url, data.params, function (res, status, xhr) {
+            if (status != 'error')
+            {
+                if(data.scripts)
+                {
+                    if (_.isArray(data.scripts))
+                    {
+                        _.each(data.scripts, function(v) {
+                            $.getScript(v, function() {
+                                app.setRuntime();
+                            });
+                        });
+                    }
+                    else
+                    {
+                        $.getScript(data.scripts, function() {
+                            app.setRuntime();
+                        });
+                    }
+                }
+            }
+            else
+            {
+                app.alert('ไม่สามารถโหลดหน้าเอกสารได้: [' + xhr.statusText + ']');
+            }
+        });
+    }
+
+
 };
 
 app.setRuntime = function() {

@@ -23,6 +23,16 @@ $(function () {
         });
     });
 
+    $('a[href="#anc"]').on('click', function() {
+        setActive($(this));
+        app.loadPage({
+            target: target,
+            url: pageUrl[1],
+            params: { id: id },
+            scripts: [scriptUrl[1]]
+        });
+    });
+
     setActive($('a[href="#info"]'));
     app.loadPage({
         target: target,

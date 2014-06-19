@@ -17,7 +17,7 @@ $(function() {
     procedure.getList = function(cb) {
         var service_id = $('#txtServiceId').val();
 
-        app.post(serviceUrl[7], {service_id: service_id}, function(err, data) {
+        app.get(serviceUrl[7], {service_id: service_id}, function(err, data) {
             err ? cb(err) : cb(null, data);
         });
     };
@@ -25,19 +25,19 @@ $(function() {
     procedure.getDentalList = function(cb) {
         var service_id = $('#txtServiceId').val();
 
-        app.post(serviceUrl[10], {service_id: service_id}, function(err, data) {
+        app.get(serviceUrl[10], {service_id: service_id}, function(err, data) {
             err ? cb(err) : cb(null, data);
         });
     };
 
     procedure.doRemove = function(id, cb) {
-        app.post(serviceUrl[8], {id: id}, function (err) {
+        app.delete(serviceUrl[8], {id: id}, function (err) {
            err ? cb(err) : cb(null);
         });
     };
 
     procedure.doRemoveDental = function(id, cb) {
-        app.post(serviceUrl[11], {id: id}, function (err) {
+        app.delete(serviceUrl[11], {id: id}, function (err) {
            err ? cb(err) : cb(null);
         });
     };
@@ -468,4 +468,3 @@ $(function() {
     procedure.getProcedureList();
     procedure.getProcedureDentalList();
 });
-

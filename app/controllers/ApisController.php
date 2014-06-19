@@ -1,13 +1,14 @@
 <?php
 
 /**
- * Class ApiController
+ * Class ApisController
  *
  * @author      Satit Rianpit <rianpit@gmail.com>
  * @copyright   2013-2015 by Maha Sarakahm Hospital <http://www.mkh.go.th>
  * @since       1.0
  */
-class ApiController extends BaseController {
+class ApisController extends BaseController
+{
 
     /**
      * Constructor function
@@ -16,12 +17,20 @@ class ApiController extends BaseController {
     public function __construct()
     {
         $this->beforeFilter('denied');
+        $this->beforeFilter(
+            function () {
+                if (!Request::ajax()) {
+                    Response::json(['ok' => 0, 'error' => 'Not ajax request'])
+                        ->setCallback(Input::get('callback'));
+                }
+            }
+        );
     }
 
     /**
      * Search Hospital
      *
-     * URI  GET /api/search/hospital
+     * URI  GET /apis/hospitals
      *
      * @internal int $page
      * @internal int $page_limit
@@ -30,15 +39,15 @@ class ApiController extends BaseController {
      * @return json
      *
      */
-    public function searchHospital()
+    public function getHospitals()
     {
-        $page       = Input::get('page');
+
+        $callback = Input::get('callback');
+        $query = Input::get('query');
+        $page = Input::get('page');
         $page_limit = Input::get('page_limit');
-        $callback   = Input::get('callback');
 
-        $start      = $page == 1 ? 0 : ($page * $page_limit) - 1;
-
-        $query      = Input::get('query');
+        $start = $page == 1 ? 0 : ($page * $page_limit) - 1;
 
         $result = DB::table('hospitals')
             ->select('hmain', 'hname')
@@ -63,25 +72,47 @@ class ApiController extends BaseController {
         return Response::json($json)->setCallback($callback);
     }
 
-    public function searchDoctorRoom()
+    /**
+     * Search hospitals
+     *
+     * GET    /apis/doctor-rooms
+     *
+     * @internal int        $clinic_id    Clinic id
+     * @internal string     $callback     Callback variable
+     *
+     * @return   Response::json
+     */
+    public function getDoctorRooms()
     {
+        $callback = Input::get('callback');
         $clinic_id = Input::get('clinic_id');
-        $callback  = Input::get('callback');
 
         $doctor_rooms = DB::table('doctor_rooms')
             ->where('clinic_id', $clinic_id)
             ->get();
 
-        $json = array('ok' => 1, 'rows' => $doctor_rooms);
+        $json = ['ok' => 1, 'rows' => $doctor_rooms];
 
         return Response::json($json)->setCallback($callback);
     }
 
-    public function searchDiagnosis()
+    /**
+     * Search diagnosis
+     *
+     * GET     /apis/diagnosis
+     *
+     * @internal    int    $page        Current page
+     * @internal    int    $page_limit  Number of record per page
+     * @internal    string $callback    Callback variable
+     *
+     * @return      Response::json
+     */
+    public function getDiagnosis()
     {
+
+        $callback = Input::get('callback');
         $page = Input::get('page');
         $page_limit = Input::get('page_limit');
-        $callback = Input::get('callback');
 
         $start = $page == 1 ? 0 : ($page * $page_limit) - 1;
 
@@ -91,22 +122,26 @@ class ApiController extends BaseController {
             ->select('code', 'desc_r')
             ->where('valid', 'T')
 
-            ->Where(function ($query) use ($condition) {
-                $query
-                    ->where('code', 'like', $condition . '%')
-                    ->orWhere('desc_r', 'like', '%' . $condition . '%');
-            })
+            ->Where(
+                function ($query) use ($condition) {
+                    $query
+                        ->where('code', 'like', $condition . '%')
+                        ->orWhere('desc_r', 'like', '%' . $condition . '%');
+                }
+            )
             ->skip($start)
             ->take($page_limit)
             ->get();
 
         $total = DB::table('diagnosis')
             ->where('valid', 'T')
-            ->Where(function ($query) use ($condition) {
-                $query
-                    ->where('code', 'like', $condition . '%')
-                    ->orWhere('desc_r', 'like', '%' . $condition . '%');
-            })
+            ->Where(
+                function ($query) use ($condition) {
+                    $query
+                        ->where('code', 'like', $condition . '%')
+                        ->orWhere('desc_r', 'like', '%' . $condition . '%');
+                }
+            )
             ->count();
 
         $json = array(
@@ -118,16 +153,28 @@ class ApiController extends BaseController {
         return Response::json($json)->setCallback($callback);
     }
 
-    public function searchProcedure()
+    /**
+     * Search procedures
+     *
+     * GET    /apis/procedures
+     *
+     * @internal int    $page        Current page number
+     * @internal int    $page_limit  Number of records pre page
+     * @internal string $callback    Callback
+     *
+     * @return   Response::json
+     */
+    public function getProcedures()
     {
-        $page       = Input::get('page');
+
+        $callback = Input::get('callback');
+
+        $page = Input::get('page');
         $page_limit = Input::get('page_limit');
-        $type       = Input::get('t');
-        $callback   = Input::get('callback');
+        $query = Input::get('query');
+        $type = Input::get('t');
 
-        $query      = Input::get('query');
-
-        $start      = $page == 1 ? 0 : ($page * $page_limit) - 1;
+        $start = $page == 1 ? 0 : ($page * $page_limit) - 1;
 
         $result = DB::table('procedures')
             ->select('id', 'name', 'price')
@@ -153,13 +200,23 @@ class ApiController extends BaseController {
         return Response::json($json)->setCallback($callback);
     }
 
-    public function getProcedurePosition()
+    /**
+     * Search procedure position
+     *
+     * GET    /apis/procedure-positions
+     *
+     * @internal int    $id        Current page number
+     * @internal string $callback    Callback
+     *
+     * @return   Response::json
+     */
+    public function getProcedurePositions()
     {
-        $callback     = Input::get('callback');
+        $callback = Input::get('callback');
         $procedure_id = Input::get('id');
 
         $result = DB::table('procedure_positions')
-            ->where('procedure_id', (int) $procedure_id)
+            ->where('procedure_id', (int)$procedure_id)
             ->get();
 
         $json = ['ok' => 1, 'rows' => $result];
@@ -167,16 +224,26 @@ class ApiController extends BaseController {
         return Response::json($json)->setCallback($callback);
     }
 
-    public function searchIncome()
+    /**
+     * Search procedures
+     *
+     * GET    /apis/incomes
+     *
+     * @internal int    $page        Current page number
+     * @internal int    $page_limit  Number of records pre page
+     * @internal string $callback    Callback
+     *
+     * @return   Response::ajax
+     */
+    public function getIncomes()
     {
-        $page       = Input::get('page');
+        $callback = Input::get('callback');
+
+        $page = Input::get('page');
         $page_limit = Input::get('page_limit');
-        $type       = Input::get('t');
-        $callback   = Input::get('callback');
+        $query = Input::get('query');
 
-        $query      = Input::get('query');
-
-        $start      = $page == 1 ? 0 : ($page * $page_limit) - 1;
+        $start = $page == 1 ? 0 : ($page * $page_limit) - 1;
 
         $result = DB::table('incomes')
             ->select('id', 'name', 'price')
@@ -200,15 +267,28 @@ class ApiController extends BaseController {
         return Response::json($json)->setCallback($callback);
     }
 
-    public function searchDrug()
+    /**
+     * Search drugs
+     *
+     * GET    /apis/drugs
+     *
+     * @internal string $query       Query string
+     * @internal int    $page        Current page number
+     * @internal int    $page_limit  Number of records pre page
+     * @internal string $callback    Callback
+     *
+     * @return   json
+     */
+    public function getDrugs()
     {
-        $page       = Input::get('page');
+
+        $callback = Input::get('callback');
+        $page = Input::get('page');
         $page_limit = Input::get('page_limit');
-        $callback   = Input::get('callback');
 
-        $query      = Input::get('query');
+        $query = Input::get('query');
 
-        $start      = $page == 1 ? 0 : ($page * $page_limit) - 1;
+        $start = $page == 1 ? 0 : ($page * $page_limit) - 1;
 
         $result = DB::table('drugs')
             ->select('id', 'name', 'price')
@@ -232,15 +312,28 @@ class ApiController extends BaseController {
         return Response::json($json)->setCallback($callback);
     }
 
-    public function searchDrugUsage()
+    /**
+     * Search procedures
+     *
+     * GET    /apis/drug-usages
+     *
+     * @internal string $query       Query string
+     * @internal int    $page        Current page number
+     * @internal int    $page_limit  Number of records pre page
+     * @internal string $callback    Callback
+     *
+     * @return   json
+     */
+    public function getDrugUsages()
     {
-        $page       = Input::get('page');
+
+        $page = Input::get('page');
         $page_limit = Input::get('page_limit');
-        $callback   = Input::get('callback');
+        $callback = Input::get('callback');
 
-        $query      = Input::get('query');
+        $query = Input::get('query');
 
-        $start      = $page == 1 ? 0 : ($page * $page_limit) - 1;
+        $start = $page == 1 ? 0 : ($page * $page_limit) - 1;
 
         $result = DB::table('drugusages')
             ->select('id', 'code')

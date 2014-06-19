@@ -4,7 +4,7 @@
 
 <ol class="breadcrumb">
     <li><a href="/">หน้าหลัก</a></li>
-    <li><a href="{{ URL::route('services.index') }}">ระบบ One Stop Service</a></li>
+    <li><a href="{{ URL::action('ServicesController@getIndex') }}">ระบบ One Stop Service</a></li>
     <li class="active">ลงทะเบียนส่งตรวจ</li>
 </ol>
 
@@ -22,7 +22,7 @@
             <a href="javascript:void(0);" class="btn btn-success navbar-btn" id="btnSaveService">
                 <i class="fa fa-save"></i> บันทึก
             </a>
-            <a href="{{ URL::route('services.index') }}" class="btn btn-default navbar-btn" id="btnCancelService">
+            <a href="{{ URL::action('ServicesController@getIndex') }}" class="btn btn-default navbar-btn" id="btnCancelService">
                 <i class="fa fa-sign-out"></i> ยกเลิก
             </a>
         </div>
@@ -136,7 +136,7 @@
                                     <select id="slServiceIns" class="form-control">
                                         <option value="">*</option>
                                         @foreach($ins as $i)
-                                        <option value="{{ $i->id }}">[{{ $i->export_code }}] {{ $i->name }}</option>
+                                        <option value="{{ $i->id }}">[{{ $i->export_code }}] {{ $i->insurance_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -348,4 +348,12 @@
 
 @section('scripts')
 {{ HTML::script('assets/app/js/services.register.js'); }}
+@stop
+
+@section('urls')
+<script>
+    var servicesUrls = [
+        "{{ action('ServicesController@postSave') }}"
+    ];
+</script>
 @stop

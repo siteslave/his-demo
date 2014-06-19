@@ -55,4 +55,10 @@ class Pregnancy extends Eloquent
             ->join('person_typearea as t', 't.cid', '=', 'p.cid')
             ->orderBy('p.fname');
     }
+
+    public function scopeGetGA($query, $person_id)
+    {
+        return $query->where('person_id', '=', $person_id)
+            ->groupBy('gravida');
+    }
 }

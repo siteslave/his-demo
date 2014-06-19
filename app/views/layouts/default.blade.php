@@ -39,7 +39,7 @@
           <ul class="dropdown-menu">
             <li role="presentation" class="dropdown-header">SERVICES</li>
             <li role="presentation">
-              <a href="{{ URL::route('services.index') }}">
+              <a href="{{ URL::action('ServicesController@getIndex') }}">
                 <i class="fa fa-desktop fa-fw"></i>
                 ระบบ One Stop Service
               </a>
@@ -95,13 +95,13 @@
           <ul class="dropdown-menu">
             <li role="presentation" class="dropdown-header">REGISTERTIONS</li>
             <li role="presentation">
-              <a href="{{ URL::route('accounts.one') }}">
+              <a href="{{ URL::action('VillagesController@getIndex') }}">
                 <i class="fa fa-desktop fa-fw"></i>
                 บัญชี 1 ระบบบันทึกข้อมูล หมู่บ้าน ข้อมูลทะเบียนบ้านและข้อมูลบุคคลในบ้าน
               </a>
             </li>
             <li role="presentation">
-              <a href="{{ URL::route('accounts.two') }}">
+              <a href="{{ URL::action('PregnanciesController@getIndex') }}">
                 <i class="fa fa-desktop fa-fw"></i>
                 บัญชี 2 ระบบบันทึกข้อมูลหญิงตั้งครรภ์ บริการฝากครรภ์ ผลการคลอดละการตรวจหลังคลอด
               </a>
@@ -250,15 +250,16 @@
         var base_url = "{{ URL::to('/') }}" ;
         //API Url
         var apiUrls = [
-            "{{ action('ApiController@searchHospital') }}",
-            "{{ action('ApiController@searchDiagnosis') }}",
-            "{{ action('PersonController@searchPerson') }}",
-            "{{ action('ApiController@searchDoctorRoom') }}",
-            "{{ action('ApiController@searchProcedure') }}",
-            "{{ action('ApiController@getProcedurePosition') }}",
-            "{{ action('ApiController@searchIncome') }}",
-            "{{ action('ApiController@searchDrug') }}",
-            "{{ action('ApiController@searchDrugUsage') }}"
+            "{{ action('ApisController@getHospitals') }}", //0
+            "{{ action('ApisController@getDiagnosis') }}", //1
+            "{{ action('PersonController@getSearch') }}", //2
+            "{{ action('ApisController@getDoctorRooms') }}", //3
+            "{{ action('ApisController@getProcedures') }}", //4
+            "{{ action('ApisController@getProcedurePositions') }}", //5
+            "{{ action('ApisController@getIncomes') }}", //6
+            "{{ action('ApisController@getDrugs') }}", //7
+            "{{ action('ApisController@getDrugUsages') }}", //8
+            "{{ action('ApisController@getDoctorRooms') }}" //9
         ];
 
     </script>

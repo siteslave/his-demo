@@ -87,6 +87,16 @@ $(function() {
         });
     });
 
+    $('a[href="#anc"]').on('click', function() {
+        setActive($(this));
+        app.loadPage({
+            target: target,
+            url: pageUrl[8],
+            params: { service_id: service_id },
+            scripts: [scriptUrl[8]]
+        });
+    });
+
     var setActive = function (obj) {
         $('#collapseService a').each(function () {
             var $this = $(this);

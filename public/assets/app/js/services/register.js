@@ -97,7 +97,7 @@ $(function() {
         }
         else
         {
-            app.post(apiUrls[2], { query: query }, function (err, data) {
+            app.get(apiUrls[2], { query: query }, function (err, data) {
                 if (!err)
                 {
                     if (data.ok)
@@ -113,7 +113,7 @@ $(function() {
                     }
                     else
                     {
-                        app.alert(data.msg);
+                        app.alert(data.error);
                         $table.append('<td colspan="7">กรุณาระบุคำค้นหา</td>');
                     }
                 }
@@ -129,7 +129,7 @@ $(function() {
      * Do save service
      */
     services.register.doSave = function (items, cb) {
-        app.post('/services/save', items, function (err) {
+        app.post(servicesUrls[0], items, function (err) {
            return err ? cb(err) : cb(null);
         });
     };
@@ -139,7 +139,7 @@ $(function() {
      */
     services.register.setDoctorRoomList = function(clinic_id) {
         var params = { clinic_id: clinic_id };
-        app.get('/api/search/doctorroom', params, function (err, data) {
+        app.get(apiUrls[9], params, function (err, data) {
             if (!err)
             {
                 _.each(data.rows, function (v) {
@@ -228,7 +228,7 @@ $(function() {
                     }
                     else
                     {
-                        location.href = '/services';
+                        location.href = base_url + '/services';
                     }
                 });
             }
@@ -244,7 +244,7 @@ $(function() {
         minimumInputLength: 2,
         allowClear: true,
         ajax: {
-            url: '/api/search/hospital',
+            url: apiUrls[0],
             dataType: 'jsonp',
             type: 'GET',
             quietMillis: 100,
@@ -276,7 +276,7 @@ $(function() {
         minimumInputLength: 2,
         allowClear: true,
         ajax: {
-            url: '/api/search/hospital',
+            url: apiUrls[0],
             dataType: 'jsonp',
             type: 'GET',
             quietMillis: 100,
@@ -308,7 +308,7 @@ $(function() {
         minimumInputLength: 2,
         allowClear: true,
         ajax: {
-            url: '/api/search/hospital',
+            url: apiUrls[0],
             dataType: 'jsonp',
             type: 'GET',
             quietMillis: 100,

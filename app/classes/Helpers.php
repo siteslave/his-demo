@@ -1,20 +1,41 @@
 <?php
+/**
+ * Helper function
+ *
+ */
 class Helpers {
+
+    /**
+     * Get curent date
+     */
     public static function getCurrentDate()
     {
         return date('d/m/Y');
     }
+
+    /**
+     * Get current MySQL date
+     */
     public static function getCurrentMySQLDate()
     {
         return date('Y-m-d');
     }
 
+    /**
+     * Get current time
+     */
     public static function getCurrentTime()
     {
         return date('H:i:s');
     }
 
-    public static function toJSDate($date)
+    /**
+     * Convert MySQL date to JavaScript date
+     *
+     * @param date  $date MySQL date
+     * @return date
+     */
+    public static function toJSDate($date = null)
     {
         if ($date == '0000-00-00' || empty($date) || !isset($date))
         {
@@ -26,8 +47,12 @@ class Helpers {
         }
     }
 
-
-    public static function fromMySQLToThaiDate($date)
+    /**
+     * Convert MySQL date to Thai date format
+     *
+     * @param  {date} $date  MySQL date
+     */
+    public static function fromMySQLToThaiDate($date = null)
     {
         if ($date == '0000-00-00' || empty($date) || !isset($date))
         {
@@ -36,9 +61,9 @@ class Helpers {
         else
         {
             $newdate = explode('-', $date);
-            $year = $newdate[0] + 543;
-            $month = $newdate[1];
-            $date = $newdate[2];
+            $year    = $newdate[0] + 543;
+            $month   = $newdate[1];
+            $date    = $newdate[2];
 
             return $date . '/' . $month . '/' . $year;
         }
@@ -59,21 +84,27 @@ class Helpers {
         }
     }
 
-    public static function countAge($birth)
+    /**
+     * Count age
+     *
+     * @param date $birth Birth date
+     * @return object
+     */
+    public static function countAge($birth = null)
     {
         $obj = new stdClass();
 
         if ($birth && $birth != '0000-00-00')
         {
-            $c_y = date('Y');
-            $c_m = date('m');
-            $c_d = date('d');
+            $c_y   = date('Y');
+            $c_m   = date('m');
+            $c_d   = date('d');
 
             $birth = date_create_from_format('Y-m-d', $birth);
 
-            $b_y = date_format($birth, 'Y');
-            $b_m = date_format($birth, 'm');
-            $b_d = date_format($birth, 'd');
+            $b_y   = date_format($birth, 'Y');
+            $b_m   = date_format($birth, 'm');
+            $b_d   = date_format($birth, 'd');
 
             if ($c_d >= $b_d) $age_d = $c_d - $b_d;
             else $c_m = $c_m - 1; $c_d = $c_d + 30; $age_d = $c_d - $b_d;
@@ -97,12 +128,3 @@ class Helpers {
         return $obj;
     }
 }
-
-
-
-
-
-
-
-
-

@@ -20,13 +20,11 @@ class HomeController extends BaseController {
 	 */
 	public function __construct()
 	{
-    // Enable CSRF protection on POST method.
 		$this->beforeFilter('csrf', array('on' => 'post'));
 	}
 
 	public function showWelcome()
 	{
-		//return Response::json(array('success' => true));
     	$this->layout->content = View::make('home');
 	}
 

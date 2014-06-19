@@ -5,6 +5,6 @@
  */
 class PregnancyRisk extends Eloquent
 {
-    protected $table = 'pregnancy_risk';
+    protected $table = 'pregnancy_risks';
 
 }

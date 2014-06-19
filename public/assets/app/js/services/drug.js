@@ -9,13 +9,13 @@ $(function () {
     };
 
     drugs.doRemove = function (id, cb) {
-        app.post(serviceUrl[17], {id: id}, function (err) {
+        app.delete(serviceUrl[17], {id: id}, function (err) {
             err ? cb(err) : cb(null);
         });
     };
 
     drugs.clearAll = function (service_id, cb) {
-        app.post(serviceUrl[18], {service_id: service_id}, function (err) {
+        app.delete(serviceUrl[18], {service_id: service_id}, function (err) {
             err ? cb(err) : cb(null);
         });
     };
@@ -23,7 +23,7 @@ $(function () {
     drugs.getList = function (cb) {
         var service_id = $('#txtServiceId').val();
 
-        app.post(serviceUrl[16], {service_id: service_id}, function (err, data) {
+        app.get(serviceUrl[16], {service_id: service_id}, function (err, data) {
             err ? cb(err) : cb(null, data);
         });
     };

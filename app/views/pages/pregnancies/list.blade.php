@@ -1,6 +1,10 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h4 class="panel-title"><span class="fa fa-edit"></span> รายชื่อทะเบียนหญิงตั้งครรภ์</h4>
+        <h4 class="panel-title">
+            <span class="fa fa-edit"></span>
+            รายชื่อทะเบียนหญิงตั้งครรภ์
+            <i class="fa fa-chevron-circle-right pull-right"></i>
+        </h4>
     </div>
     <div class="panel-body">
                 <span class="text-muted">

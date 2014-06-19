@@ -7,7 +7,7 @@
  * @since  		1.0.0
  */
 
-class VillageController extends BaseController {
+class VillagesController extends BaseController {
 
   protected $layout = 'layouts.default';
 
@@ -26,7 +26,7 @@ class VillageController extends BaseController {
    *
    * @return Response
    */
-  public function index()
+  public function getIndex()
   {
     $villages = Village::where('hospcode', Session::get('hospcode'))
                 ->get();

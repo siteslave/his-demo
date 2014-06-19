@@ -53,8 +53,7 @@
 @section('urls')
 <script>
     var pageUrl = [
-            "{{ action('PageController@pregnancyList') }}", //0
-            "{{ action('PageController@pregnancyRegister') }}" //1
+            "{{ action('PagesController@getPregnanciesList') }}"
         ],
 
         scriptUrl = [
@@ -63,8 +62,8 @@
         ],
 
         actionUrl = [
-            "{{ action('PregnancyController@doRegister') }}",
-            "{{ action('PregnancyController@getList') }}"
+            "{{ action('PregnanciesController@postRegister') }}",
+            "{{ action('PregnanciesController@getList') }}"
         ];
 </script>
 @stop

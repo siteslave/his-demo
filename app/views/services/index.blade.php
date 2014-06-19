@@ -52,7 +52,7 @@
       <div class="col-sm-2 visible-lg">
           <div class="btn-group pull-right">
             <!-- <a href="{{ url('services/register') }}" id="btnNew" class="btn btn-success"> -->
-            <a href="{{URL::route('services.register')}}" class="btn btn-success">
+            <a href="{{URL::action('ServicesController@getRegister')}}" class="btn btn-success">
               <i class="fa fa-plus-circle"></i> ส่งตรวจ
           </a>
           <a href="javascript:void(0);" id="btnSearchVisit" class="btn btn-primary">
@@ -114,6 +114,14 @@
 
 @stop
 
+@section('urls')
+<script>
+    var serviceUrls = [
+        "{{ action('ServicesController@postAncScreen') }}" //0
+    ];
+</script>
+@stop
+
 @section('scripts')
-{{ HTML::script('/assets/app/js/services.index.js'); }}
+{{ HTML::script('/assets/app/js/services/index.js'); }}
 @stop

@@ -9,7 +9,7 @@ $(function() {
     };
 
     income.doRemove = function (id, cb) {
-        app.post(serviceUrl[14], {id: id}, function (err) {
+        app.delete(serviceUrl[14], {id: id}, function (err) {
            err ? cb(err) : cb(null);
         });
     };
@@ -18,7 +18,7 @@ $(function() {
     income.getList = function (cb) {
         var service_id = $('#txtServiceId').val();
 
-        app.post(serviceUrl[13], {service_id: service_id}, function (err, data) {
+        app.get(serviceUrl[13], {service_id: service_id}, function (err, data) {
            err ? cb(err) : cb(null, data);
         });
     };

@@ -8,7 +8,7 @@ $(function () {
     };
 
     preg.doGetList = function (cb) {
-        app.post(actionUrl[1], {}, function (err, data) {
+        app.get(actionUrl[1], {}, function (err, data) {
             err ? cb(err) : cb(null, data);
         });
     };

@@ -6,7 +6,7 @@
 
 <ol class="breadcrumb">
     <li><a href="{{ URL::to('/') }}">หน้าหลัก</a></li>
-    <li><a href="{{ URL::route('accounts.two') }}">ทะเบียนหญิงตั้งครรภ์</a></li>
+    <li><a href="{{ URL::action('PregnanciesController@getIndex') }}">ทะเบียนหญิงตั้งครรภ์</a></li>
     <li class="active">ข้อมูลการตั้งครรภ์</li>
 </ol>
 
@@ -61,9 +61,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer">
+                <div class="panel-footer text-center">
+                    <a class="btn btn-primary" href="{{ action('PregnanciesController@getIndex') }}">
+                        <i class="fa fa-home"></i> หน้าหลัก
+                    </a>
                     <a class="btn btn-danger" href="javascript:void(0);" id="btnRemoveService">
-                        <i class="fa fa-trash-o"></i> จำหน่ายออกจากบัญชี
+                        <i class="fa fa-trash-o"></i> จำหน่าย
                     </a>
                 </div>
             </div>
@@ -104,17 +107,20 @@
 @section('urls')
 <script>
     var pageUrl = [
-            "{{ action('PageController@pregnancyDetail') }}" //1
+            "{{ action('PagesController@postPregnancyDetail') }}", //1
+            "{{ action('PagesController@postPregnanciesAnc') }}" //2
         ],
 
         scriptUrl = [
-            "{{ asset('assets/app/js/pregnancies/pregnancies.js') }}"
+            "{{ asset('assets/app/js/pregnancies/pregnancies.js') }}",
+            "{{ asset('assets/app/js/pregnancies/anc.js') }}"
         ],
 
         actionUrl = [
-            "{{ action('PregnancyController@doRegister') }}",
-            "{{ action('PregnancyController@getList') }}",
-            "{{ action('PregnancyController@saveDetail') }}"
+            "{{ action('PregnanciesController@postRegister') }}", //0
+            "{{ action('PregnanciesController@getList') }}", //1
+            "{{ action('PregnanciesController@postDetail') }}"
+
         ];
 </script>
 @stop

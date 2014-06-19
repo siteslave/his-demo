@@ -9,13 +9,13 @@ $(function() {
     };
 
     appoints.doRemove = function (id, cb) {
-        app.post(serviceUrl[21], {id: id}, function (err) {
+        app.delete(serviceUrl[21], {id: id}, function (err) {
            err ? cb(err) : cb(null);
         });
     };
 
     appoints.getList = function (service_id, cb) {
-        app.post(serviceUrl[20], {service_id: service_id}, function (err, data) {
+        app.get(serviceUrl[20], {service_id: service_id}, function (err, data) {
            err ? cb(err) : cb(null, data);
         });
     };

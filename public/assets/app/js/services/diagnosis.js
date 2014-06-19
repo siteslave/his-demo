@@ -10,7 +10,7 @@ $(function() {
     };
     // Remove diag
     services.diag.doRemove = function (id, cb) {
-        app.post(serviceUrl[5], { id: id }, function (err) {
+        app.delete(serviceUrl[5], { id: id }, function (err) {
            err ? cb(err) : cb(null);
         });
     };

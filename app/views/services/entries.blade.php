@@ -5,7 +5,7 @@
 @section('content')
 <ol class="breadcrumb">
     <li><a href="/">หน้าหลัก</a></li>
-    <li><a href="{{ URL::route('services.index') }}">การให้บริการ</a></li>
+    <li><a href="{{ URL::action('ServicesController@getIndex') }}">การให้บริการ</a></li>
     <li class="active">ข้อมูลการให้บริการ</li>
 </ol>
 
@@ -126,7 +126,7 @@
                         <a class="list-group-item" href="#"><i class="fa fa-fw fa-medkit"></i> วางแผนครอบครัว (FP)</a>
                         <a class="list-group-item" href="#"><i class="fa fa-fw fa-medkit"></i> บันทึกโภชนาการ (Nutrition)</a>
                         <a class="list-group-item" href="#"><i class="fa fa-fw fa-medkit"></i> บันทึกการให้วัคซีน (EPI)</a>
-                        <a class="list-group-item" href="#"><i class="fa fa-fw fa-medkit"></i> บันทึกการฝากครรภ์ (ANC)</a>
+                        <a class="list-group-item" href="#anc"><i class="fa fa-fw fa-medkit"></i> บันทึกการฝากครรภ์ (ANC)</a>
                         <a class="list-group-item" href="#"><i class="fa fa-fw fa-medkit"></i> เยี่ยมหลังคลอด (มารดา)</a>
                         <a class="list-group-item" href="#"><i class="fa fa-fw fa-medkit"></i> เยี่ยมหลังคลอด (เด็ก)</a>
                     </div>
@@ -146,56 +146,58 @@
 @section('urls')
 <script>
     var serviceUrl = [
-            "{{ action('ServiceController@save') }}", //0
-            "{{ action('ServiceController@getList') }} ", //1
-            "{{ action('ServiceController@searchVisit') }} ", //2
-            "{{ action('ServiceController@saveScreening') }}", //3
-            "{{ action('ServiceController@saveDiagnosis') }}", //4
-            "{{ action('ServiceController@removeDiagnosis') }}", //5
-            "{{ action('ServiceController@saveProcedure') }}", //6
-            "{{ action('ServiceController@getProcedureList') }}", //7
-            "{{ action('ServiceController@removeProcedure') }}", //8
-            "{{ action('ServiceController@saveProcedureDental') }}", //9
-            "{{ action('ServiceController@getProcedureDentalList') }}", //10
-            "{{ action('ServiceController@removeProcedureDental') }}", //11
-            "{{ action('ServiceController@saveIncome') }}", //12
-            "{{ action('ServiceController@getIncomeList') }}", //13
-            "{{ action('ServiceController@removeIncome') }}", //14
-            "{{ action('ServiceController@saveDrug') }}", //15
-            "{{ action('ServiceController@getDrugList') }}", //16
-            "{{ action('ServiceController@removeDrug') }}", //17
-            "{{ action('ServiceController@clearDrug') }}", //18
-            "{{ action('ServiceController@saveAppoint') }}", //19
-            "{{ action('ServiceController@getAppointList') }}", //20
-            "{{ action('ServiceController@removeAppoint') }}", //21
-            "{{ action('ServiceController@saveReferOut') }}", //22
-            "{{ action('ServiceController@removeReferOut') }}", //23
-            "{{ action('ServiceController@saveAccident') }}", //24
-            "{{ action('ServiceController@removeAccident') }}" //25
+            "{{ action('ServicesController@postSave') }}", //0
+            "{{ action('ServicesController@getList') }} ", //1
+            "{{ action('ServicesController@postSearch') }} ", //2
+            "{{ action('ServicesController@postScreenings') }}", //3
+            "{{ action('ServicesController@postDiagnosis') }}", //4
+            "{{ action('ServicesController@deleteDiagnosis') }}", //5
+            "{{ action('ServicesController@postProcedure') }}", //6
+            "{{ action('ServicesController@getProcedure') }}", //7
+            "{{ action('ServicesController@deleteProcedure') }}", //8
+            "{{ action('ServicesController@postProcedureDental') }}", //9
+            "{{ action('ServicesController@getProcedureDental') }}", //10
+            "{{ action('ServicesController@deleteProcedureDental') }}", //11
+            "{{ action('ServicesController@postIncome') }}", //12
+            "{{ action('ServicesController@getIncome') }}", //13
+            "{{ action('ServicesController@deleteIncome') }}", //14
+            "{{ action('ServicesController@postDrug') }}", //15
+            "{{ action('ServicesController@getDrug') }}", //16
+            "{{ action('ServicesController@deleteDrug') }}", //17
+            "{{ action('ServicesController@deleteDrugAll') }}", //18
+            "{{ action('ServicesController@postAppoint') }}", //19
+            "{{ action('ServicesController@getAppoint') }}", //20
+            "{{ action('ServicesController@deleteAppoint') }}", //21
+            "{{ action('ServicesController@postReferOut') }}", //22
+            "{{ action('ServicesController@deleteReferOut') }}", //23
+            "{{ action('ServicesController@postAccident') }}", //24
+            "{{ action('ServicesController@deleteAccident') }}" //25
         ],
         pageUrl = [
-            "{{ action('PageController@serviceScreening') }}", //0
-            "{{ action('PageController@serviceDiagnosis') }}", //1
-            "{{ action('PageController@serviceProcedure') }}", //2
-            "{{ action('PageController@serviceIncome') }}", //3
-            "{{ action('PageController@serviceDrug') }}", //4
-            "{{ action('PageController@serviceAppointment') }}", //5
-            "{{ action('PageController@serviceReferOut') }}", //6
-            "{{ action('PageController@serviceAccident') }}" //7
+            "{{ action('PagesController@postServiceScreenings') }}", //0
+            "{{ action('PagesController@postServiceDiagnosis') }}", //1
+            "{{ action('PagesController@postServiceProcedures') }}", //2
+            "{{ action('PagesController@postServiceIncomes') }}", //3
+            "{{ action('PagesController@postServiceDrugs') }}", //4
+            "{{ action('PagesController@postServiceAppoint') }}", //5
+            "{{ action('PagesController@postServiceReferOut') }}", //6
+            "{{ action('PagesController@postServiceAccidents') }}", //7
+            "{{ action('PagesController@postServiceAnc') }}" //8
         ],
         scriptUrl = [
-            "{{ asset('assets/app/js/services.screening.js') }}", //0
-            "{{ asset('assets/app/js/services.diagnosis.js') }}", //1
-            "{{ asset('assets/app/js/services.procedure.js') }}", //2
-            "{{ asset('assets/app/js/services.income.js') }}", //3
-            "{{ asset('assets/app/js/services.drug.js') }}", //4
-            "{{ asset('assets/app/js/services.appointment.js') }}", //5
-            "{{ asset('assets/app/js/services.referout.js') }}", //6
-            "{{ asset('assets/app/js/services.accident.js') }}" //7
+            "{{ asset('assets/app/js/services/screening.js') }}", //0
+            "{{ asset('assets/app/js/services/diagnosis.js') }}", //1
+            "{{ asset('assets/app/js/services/procedure.js') }}", //2
+            "{{ asset('assets/app/js/services/income.js') }}", //3
+            "{{ asset('assets/app/js/services/drug.js') }}", //4
+            "{{ asset('assets/app/js/services/appointment.js') }}", //5
+            "{{ asset('assets/app/js/services/referout.js') }}", //6
+            "{{ asset('assets/app/js/services/accident.js') }}", //7
+            "{{ asset('assets/app/js/services/anc.js') }}" //8
         ];
 </script>
 @stop
 
 @section('scripts')
-{{ HTML::script(asset('assets/app/js/services.entries.js')); }}
+{{ HTML::script(asset('assets/app/js/services/entries.js')); }}
 @stop

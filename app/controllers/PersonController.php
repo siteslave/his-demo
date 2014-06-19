@@ -18,7 +18,16 @@ class PersonController extends BaseController {
     public function __construct()
     {
         $this->beforeFilter('csrf', array('on' => 'post'));
-        $this->beforeFilter('auth', array('only' => array('showEdit')));
+        //$this->beforeFilter('auth', array('only' => array('showEdit')));
+        $this->beforeFilter(function() {
+            if (!Auth::check()) {
+                if (Request::ajax) {
+                    return Response::json(['ok' => 0, 'error' => 'Please login']);
+                } else {
+                    return View::make('errors.denied');
+                }
+            }
+        });
     }
 
     public function showEdit($pid)
@@ -132,78 +141,82 @@ class PersonController extends BaseController {
         return $result;
     }
 
-    public function searchPerson()
+    public function getSearch()
     {
         $query = Input::get('query');
         $callback = Input::get('callback');
 
-        /**
-         * Search by CID
-         */
-        if (is_numeric($query))
-        {
-            $result = $this->_searchByCID($query);
-        }
-        else
-        {
-            #$query = explode(" ", $query);
-            $query = preg_split('/[\s,]+/', $query);
-
-            if (count($query) > 1)
+        if (empty($query)) {
+            $json = ['ok' => 0, 'error' => 'No query for search, please assign word for search.'];
+        } else {
+            /**
+             * Search by CID
+             */
+            if (is_numeric($query))
             {
-                //search by lastname
-                if (empty($query[0]))
-                {
-                    $result = $this->_searchByLastName($query[1]);
-                }
-                else
-                {
-                    $fname = $query[0]; //first name
-                    $lname = $query[1]; //last name
-
-                    //search by lastname
-                    if (strlen($fname) == 0)
-                    {
-                        $result = $this->_searchByLastName($lname);
-                    }
-                    //search by firstname
-                    else if (strlen($lname) == 0)
-                    {
-                        $result = $this->_searchByFirstName($fname);
-                    }
-                    //search by firstname and lastname
-                    else
-                    {
-                        $result = $this->_searchByFirstNameAndLastName($fname, $lname);
-                    }
-
-                }
+                $result = $this->_searchByCID($query);
             }
-            //search by firstname
             else
             {
-                $result = $this->_searchByFirstName($query[0]);
+                #$query = explode(" ", $query);
+                $query = preg_split('/[\s,]+/', $query);
+
+                if (count($query) > 1)
+                {
+                    //search by lastname
+                    if (empty($query[0]))
+                    {
+                        $result = $this->_searchByLastName($query[1]);
+                    }
+                    else
+                    {
+                        $fname = $query[0]; //first name
+                        $lname = $query[1]; //last name
+
+                        //search by lastname
+                        if (strlen($fname) == 0)
+                        {
+                            $result = $this->_searchByLastName($lname);
+                        }
+                        //search by firstname
+                        else if (strlen($lname) == 0)
+                        {
+                            $result = $this->_searchByFirstName($fname);
+                        }
+                        //search by firstname and lastname
+                        else
+                        {
+                            $result = $this->_searchByFirstNameAndLastName($fname, $lname);
+                        }
+
+                    }
+                }
+                //search by firstname
+                else
+                {
+                    $result = $this->_searchByFirstName($query[0]);
+                }
             }
+
+            $rows = [];
+
+            foreach ($result as $r)
+            {
+                $obj = new stdClass();
+                $obj->cid = $r->cid;
+                $obj->fullname = $r->fname . ' ' . $r->lname;
+                $obj->birthdate = $r->birthdate;
+                $obj->sex = $r->sex;
+                $obj->person_id = $r->id;
+                $obj->address = Utils::getShortAddress($r->home_id);
+                $obj->typearea = $r->typearea;
+                $obj->home_id = $r->home_id;
+
+                $rows[] = $obj;
+            }
+
+            $json = ['ok' => 1, 'rows' => $rows];
         }
-
-        $rows = [];
-
-        foreach ($result as $r)
-        {
-            $obj = new stdClass();
-            $obj->cid = $r->cid;
-            $obj->fullname = $r->fname . ' ' . $r->lname;
-            $obj->birthdate = $r->birthdate;
-            $obj->sex = $r->sex;
-            $obj->person_id = $r->id;
-            $obj->address = Utils::getShortAddress($r->home_id);
-            $obj->typearea = $r->typearea;
-            $obj->home_id = $r->home_id;
-
-            $rows[] = $obj;
-        }
-
-        $json = ['ok' => 1, 'rows' => $rows];
 
         return Response::json($json)->setCallback($callback);
     }

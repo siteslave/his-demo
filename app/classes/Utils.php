@@ -7,6 +7,7 @@
  */
 
 class Utils {
+    
     public static function getCurrentInsurance($person_id)
     {
         $ins = DB::table('insurances as i')
@@ -19,6 +20,10 @@ class Utils {
         return $ins;
     }
 
+    /**
+    * Get short address
+    *
+    */
     public static function getShortAddress($home_id)
     {
         $address = DB::table('house as h')
